@@ -1,0 +1,94 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        
+        "siteName": {
+            "value": "testwebappa001"
+        },
+        "siteName2": {
+            "value": "testwebappa002"
+        },
+        "administratorLogin": {
+            "value": "GEN-UNIQUE-12"
+        },
+        "administratorLoginPassword": {
+            "value": ""
+        },
+        "hostingPlanName": {
+            "value": "testhosting001"
+        },
+        "hostingPlanName2": {
+            "value": "testhosting002"
+        },
+        "appInsightsName": {
+            "value": "testwebappai001"
+        },
+        "appInsightsName2": {
+            "value": "testwebappai002"
+        },
+        "cacheSKUName": {
+            "value": "Basic"
+        },
+        "cacheSKUFamily": {
+            "value": "C"
+        },
+        "cacheSKUCapacity": {
+            "value": 0
+        },
+        "skuName": {
+            "value": "P1v2"
+        },
+        "skuCapacity": {
+            "value": 1
+        },
+        "databaseSkucapacity": {
+            "value": 2
+        },
+        "databaseSkuName": {
+            "value": "GP_Gen5_2"
+        },
+        "databaseSkuSizeMB": {
+            "value": 51200
+        },
+        "databaseSkuTier": {
+            "value": "GeneralPurpose"
+        },
+        "mysqlVersion": {
+            "value": "5.6"
+        },
+        "databaseSkuFamily": {
+            "value": "Gen5"
+        },
+        "cacheName": {
+            "value": "cachetest01"
+        },
+        "environments": {
+            "value": ["slot001"]
+        },
+        "environments2": {
+            "value": ["slot001"]
+        },
+        "endpointName": {
+            "value": "eptesttest001"
+        },
+        "originUrl": {
+            "value": "www.testendpointurl00001.com"
+        },
+        "endpointName2": {
+            "value": "eptesttest002"
+        },
+        "originUrl2": {
+            "value": "www.testendpointurl00002.com"
+        },
+        "CDNSku": {
+            "value": "Standard_Akamai"
+        },
+        "profileName": {
+            "value": "testcdnname"
+        },
+        "cdnlocation": {
+            "value": "NorthEurope"
+        }
+    }
+}

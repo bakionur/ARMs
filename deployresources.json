@@ -1,0 +1,706 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "appInsightsName": {
+            "type": "string",
+            "minLength": 1,
+            "metadata": {
+                "description": "Describes the name of the Application Insights resource"
+            }
+        },
+        "appInsightsName2": {
+            "type": "string",
+            "minLength": 1,
+            "metadata": {
+                "description": "Describes the name of the Application Insights resource"
+            }
+        },
+        "cacheSKUName": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Basic",
+            "metadata": {
+                "description": "The pricing tier of the new Azure Redis Cache."
+            }
+        },
+        "cacheSKUFamily": {
+            "type": "string",
+            "allowedValues": [
+                "C"
+            ],
+            "defaultValue": "C",
+            "metadata": {
+                "description": "The family for the sku."
+            }
+        },
+        "cacheSKUCapacity": {
+            "type": "int",
+            "allowedValues": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+            ],
+            "defaultValue": 0,
+            "metadata": {
+                "description": "The size of the new Azure Redis Cache instance. "
+            }
+        },
+        "hostingPlanName": {
+            "type": "string",
+            "minLength": 1
+        },
+        "hostingPlanName2": {
+            "type": "string",
+            "minLength": 1
+        },
+        "skuName": {
+            "type": "string",
+            "defaultValue": "P1v2",
+            "allowedValues": [
+                "F1",
+                "D1",
+                "B1",
+                "B2",
+                "B3",
+                "S1",
+                "S2",
+                "S3",
+                "P1v2",
+                "P2",
+                "P3",
+                "P4"
+            ],
+            "metadata": {
+                "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+            }
+        },
+        "skuCapacity": {
+            "type": "int",
+            "defaultValue": 1,
+            "minValue": 1,
+            "metadata": {
+                "description": "Describes plan's instance count"
+            }
+        },
+        "siteName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of azure web app"
+            }
+        },
+        "siteName2": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of azure web app"
+            }
+        },
+        "administratorLogin": {
+            "type": "string",
+            "minLength": 1,
+            "metadata": {
+                "description": "Database administrator login name"
+            }
+        },
+        "administratorLoginPassword": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128,
+            "metadata": {
+                "description": "Database administrator password"
+            }
+        },
+        "databaseSkucapacity": {
+            "type": "int",
+            "defaultValue": 2,
+            "allowedValues": [
+                2,
+                4,
+                8,
+                16,
+                32
+            ],
+            "metadata": {
+                "description": "Azure database for PostgreSQL compute capacity in vCores (2,4,8,16,32)"
+            }
+        },
+        "databaseSkuName": {
+            "type": "string",
+            "defaultValue": "GP_Gen5_2",
+            "allowedValues": [
+                "GP_Gen5_2",
+                "GP_Gen5_4",
+                "GP_Gen5_8",
+                "GP_Gen5_16",
+                "GP_Gen5_32",
+                "MO_Gen5_2",
+                "MO_Gen5_4",
+                "MO_Gen5_8",
+                "MO_Gen5_16",
+                "MO_Gen5_32"
+            ],
+            "metadata": {
+                "description": "Azure database for PostgreSQL sku name "
+            }
+        },
+        "databaseSkuSizeMB": {
+            "type": "int",
+            "allowedValues": [
+                102400,
+                51200
+            ],
+            "defaultValue": 51200,
+            "metadata": {
+                "description": "Azure database for PostgreSQL Sku Size "
+            }
+        },
+        "databaseSkuTier": {
+            "type": "string",
+            "defaultValue": "GeneralPurpose",
+            "allowedValues": [
+                "GeneralPurpose",
+                "MemoryOptimized"
+            ],
+            "metadata": {
+                "description": "Azure database for PostgreSQL pricing tier"
+            }
+        },
+        "mysqlVersion": {
+            "type": "string",
+            "allowedValues": [
+                "5.6",
+                "5.7"
+            ],
+            "defaultValue": "5.6",
+            "metadata": {
+                "description": "MySQL version"
+            }
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "databaseSkuFamily": {
+            "type": "string",
+            "defaultValue": "Gen5",
+            "metadata": {
+                "description": "Azure database for PostgreSQL sku family"
+            }
+        },
+        "cacheName": {
+            "type": "string",
+            "defaultValue": "cachetest01",
+            "metadata": {
+                "description": "Azure database for PostgreSQL sku family"
+            } 
+        },
+        "environments": {
+            "defaultValue": [
+                "slot001"
+            ],
+            "type": "array",
+            "metadata": {
+            "description": "Array with the names for the environment slots"
+            }
+        },
+        "environments2": {
+            "defaultValue": [
+                "slot001"
+            ],
+            "type": "array",
+            "metadata": {
+            "description": "Array with the names for the environment slots"
+            }
+        },
+        "endpointName": {
+            "type": "string",
+            "defaultValue": "eptesttest001",
+            "metadata": {
+            "description": "Name of the CDN Endpoint"
+            }
+        },
+        "originUrl": {
+            "type": "string",
+            "defaultValue": "www.testendpointurl00001.com",
+            "metadata": {
+                "description": "Url of the origin"
+            }
+        },
+        "endpointName2": {
+            "type": "string",
+            "defaultValue": "eptesttest002",
+            "metadata": {
+            "description": "Name of the CDN Endpoint"
+            }
+        },
+        "originUrl2": {
+            "type": "string",
+            "defaultValue": "www.testendpointurl00002.com",
+            "metadata": {
+                "description": "Url of the origin"
+            }
+        },
+        "CDNSku": {
+            "type": "string",
+            "metadata": {
+                "description": "CDN SKU names"
+            },
+            "defaultValue": "Standard_Akamai",
+            "allowedValues": [
+                "Standard_Akamai",
+                "Standard_Verizon",
+                "Premium_Verizon"
+            ]
+        },
+        "profileName": {
+            "type": "string",
+            "defaultValue": "testcdnbakionur",
+            "metadata": {
+                "description": "Name of the CDN Profile"
+            }
+        },
+        "cdnlocation": {
+            "type": "string",
+            "defaultValue": "NorthEurope",
+            "metadata": {
+                "description": "CDN location"
+            } 
+        }
+    },
+    "variables": {
+        "databaseName": "[concat(parameters('siteName'), 'database')]",
+        "serverName": "[concat(parameters('siteName'), 'pgserver')]",
+        "databaseName2": "[concat(parameters('siteName2'), 'database')]",
+        "serverName2": "[concat(parameters('siteName2'), 'pgserver')]"
+    },
+    "resources": [
+        
+        {
+            "name": "[parameters('cacheName')]",
+            "type": "Microsoft.Cache/Redis",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "cache"
+            },
+            "properties": {
+                "sku": {
+                "name": "[parameters('cacheSKUName')]",
+                "family": "[parameters('cacheSKUFamily')]",
+                "capacity": "[parameters('cacheSKUCapacity')]"
+                }
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "HostingPlan"
+            },
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "capacity": "[parameters('skuCapacity')]"
+            },
+            "properties": {
+                "name": "[parameters('hostingPlanName')]"
+            }
+        },
+                {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('hostingPlanName2')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "displayName": "HostingPlan"
+            },
+            "sku": {
+                "name": "[parameters('skuName')]",
+                "capacity": "[parameters('skuCapacity')]"
+            },
+            "properties": {
+                "name": "[parameters('hostingPlanName2')]"
+            }
+        },
+        {
+            "apiVersion": "2016-08-01",
+            "type": "Microsoft.Web/sites/slots",
+            "name": "[concat(parameters('siteName'), '/', parameters('environments')[copyIndex()])]",
+            "kind": "app",
+            "location": "[parameters('location')]",
+            "comments": "This specifies the web app slots.",
+            "tags": {
+                "displayName": "WebAppSlots"
+            },
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[resourceId('Microsoft.Web/Sites/', parameters('SiteName'))]"
+            ],
+            "copy": {
+                "name": "webPortalSlot",
+                "count": "[length(parameters('environments'))]"
+            }
+        },
+        {
+            "apiVersion": "2016-08-01",
+            "type": "Microsoft.Web/sites/slots",
+            "name": "[concat(parameters('siteName2'), '/', parameters('environments2')[copyIndex()])]",
+            "kind": "app",
+            "location": "[parameters('location')]",
+            "comments": "This specifies the web app slots.",
+            "tags": {
+                "displayName": "WebAppSlots"
+            },
+            "properties": {
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName2'))]"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName2'))]",
+                "[resourceId('Microsoft.Web/Sites/', parameters('SiteName2'))]"
+            ],
+            "copy": {
+                "name": "webPortalSlot",
+                "count": "[length(parameters('environments2'))]"
+            }
+        },
+        {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('SiteName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource",
+                "displayName": "Website"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[resourceId('microsoft.insights/components/', parameters('appInsightsName'))]"
+            ],
+            "properties": {
+                "name": "[parameters('SiteName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-11-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('SiteName'))]",
+                        "[concat('Microsoft.Cache/Redis/', parameters('cacheName'))]",
+                        "Microsoft.ApplicationInsights.AzureWebSites"
+                    ],
+                    "properties": {
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', parameters('appInsightsName'))).InstrumentationKey]",
+                        "CacheConnection": "[concat(parameters('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('cacheName')), '2015-08-01').primaryKey)]"
+                    }
+                },
+                {
+                    "apiVersion": "2018-11-01",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                    "type": "siteextensions",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('SiteName'))]"
+                    ],
+                    "properties": {
+                    }
+                },
+                {
+                    "apiVersion": "2016-08-01",
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('siteName'))]"
+                        //"[resourceId('Microsoft.Web/Sites', parameters('webSiteName'))]"
+                    ],
+                    "properties": {
+                        "defaultConnection": {
+                            "value": "[concat('Database=', variables('databaseName'), ';Data Source=', reference(resourceId('Microsoft.DBforMySQL/servers',variables('serverName'))).fullyQualifiedDomainName, ';User Id=', parameters('administratorLogin'),'@', variables('serverName'),';Password=', parameters('administratorLoginPassword'))]",
+                            "type": "MySql"
+                        }
+                    }
+                }
+            ]
+        },
+                {
+            "apiVersion": "2015-08-01",
+            "name": "[parameters('SiteName2')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName2'))]": "Resource",
+                "displayName": "Website"
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName2'))]",
+                "[resourceId('microsoft.insights/components/', parameters('appInsightsName2'))]"
+            ],
+            "properties": {
+                "name": "[parameters('SiteName2')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName2'))]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2018-11-01",
+                    "name": "appsettings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('SiteName2'))]",
+                        "[concat('Microsoft.Cache/Redis/', parameters('cacheName'))]",
+                        "Microsoft.ApplicationInsights.AzureWebSites"
+                    ],
+                    "properties": {
+                        "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(concat('microsoft.insights/components/', parameters('appInsightsName2'))).InstrumentationKey]",
+                        "CacheConnection": "[concat(parameters('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', parameters('cacheName')), '2015-08-01').primaryKey)]"
+                    }
+                },
+                {
+                    "apiVersion": "2018-11-01",
+                    "name": "Microsoft.ApplicationInsights.AzureWebSites",
+                    "type": "siteextensions",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/Sites', parameters('SiteName2'))]"
+                    ],
+                    "properties": {
+                    }
+                },
+                {
+                    "apiVersion": "2016-08-01",
+                    "name": "connectionstrings",
+                    "type": "config",
+                    "dependsOn": [
+                        "[concat('Microsoft.Web/sites/', parameters('siteName2'))]"
+                        //"[resourceId('Microsoft.Web/Sites', parameters('webSiteName2'))]"
+                    ],
+                    "properties": {
+                        "defaultConnection": {
+                            "value": "[concat('Database=', variables('databaseName2'), ';Data Source=', reference(resourceId('Microsoft.DBforMySQL/servers',variables('serverName2'))).fullyQualifiedDomainName, ';User Id=', parameters('administratorLogin'),'@', variables('serverName2'),';Password=', parameters('administratorLoginPassword'))]",
+                            "type": "MySql"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "apiVersion": "2014-04-01",
+            "name": "[parameters('appInsightsName')]",
+            "type": "Microsoft.Insights/components",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('SiteName'))]": "Resource",
+                "displayName": "AppInsightsComponent"
+            },
+            "properties": {
+                "applicationId": "[parameters('appInsightsName')]"
+            }
+        },
+                {
+            "apiVersion": "2014-04-01",
+            "name": "[parameters('appInsightsName2')]",
+            "type": "Microsoft.Insights/components",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', parameters('SiteName2'))]": "Resource",
+                "displayName": "AppInsightsComponent"
+            },
+            "properties": {
+                "applicationId": "[parameters('appInsightsName2')]"
+            }
+        },
+        {
+            "apiVersion": "2017-12-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('serverName')]",
+            "type": "Microsoft.DBforMySQL/servers",
+            "sku": {
+                "name": "[parameters('databaseSkuName')]",
+                "tier": "[parameters('databaseSkuTier')]",
+                "capacity": "[parameters('databaseSkucapacity')]",
+                "size": "[parameters('databaseSkuSizeMB')]",
+                "family": "[parameters('databaseSkuFamily')]"
+            },
+            "properties": {
+                "version": "[parameters('mysqlVersion')]",
+                "createMode": "Default",
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "storageProfile": {
+                    "storageMB": "[parameters('databaseSkuSizeMB')]",
+                    "backupRetentionDays": 7,
+                    "geoRedundantBackup": "Disabled"
+                },
+                "sslEnforcement": "Disabled"
+            },
+            "resources": [
+                {
+                    "type": "firewallrules",
+                    "apiVersion": "2017-12-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'),'/databases/' , variables('databaseName'))]",
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
+                    ],
+                    "location": "[parameters('location')]",
+                    "name": "AllowAzureIPs",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "name": "[variables('databaseName')]",
+                    "type": "databases",
+                    "apiVersion": "2017-12-01",
+                    "properties": {
+                        "charset": "utf8",
+                        "collation": "utf8_general_ci"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName'))]"
+                    ]
+                }
+            ]
+        },
+        {
+            "apiVersion": "2017-12-01",
+            "location": "[parameters('location')]",
+            "name": "[variables('serverName2')]",
+            "type": "Microsoft.DBforMySQL/servers",
+            "sku": {
+                "name": "[parameters('databaseSkuName')]",
+                "tier": "[parameters('databaseSkuTier')]",
+                "capacity": "[parameters('databaseSkucapacity')]",
+                "size": "[parameters('databaseSkuSizeMB')]",
+                "family": "[parameters('databaseSkuFamily')]"
+            },
+            "properties": {
+                "version": "[parameters('mysqlVersion')]",
+                "createMode": "Default",
+                "administratorLogin": "[parameters('administratorLogin')]",
+                "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+                "storageProfile": {
+                    "storageMB": "[parameters('databaseSkuSizeMB')]",
+                    "backupRetentionDays": 7,
+                    "geoRedundantBackup": "Disabled"
+                },
+                "sslEnforcement": "Disabled"
+            },
+            "resources": [
+                {
+                    "type": "firewallrules",
+                    "apiVersion": "2017-12-01",
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName2'),'/databases/' , variables('databaseName2'))]",
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName2'))]"
+                    ],
+                    "location": "[parameters('location')]",
+                    "name": "AllowAzureIPs",
+                    "properties": {
+                        "startIpAddress": "0.0.0.0",
+                        "endIpAddress": "0.0.0.0"
+                    }
+                },
+                {
+                    "name": "[variables('databaseName2')]",
+                    "type": "databases",
+                    "apiVersion": "2017-12-01",
+                    "properties": {
+                        "charset": "utf8",
+                        "collation": "utf8_general_ci"
+                    },
+                    "dependsOn": [
+                        "[concat('Microsoft.DBforMySQL/servers/', variables('serverName2'))]"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "[parameters('profileName')]",
+            "type": "Microsoft.Cdn/profiles",
+            "location": "[parameters('cdnlocation')]",
+            "apiVersion": "2016-04-02",
+            "sku": {
+                "name": "[parameters('CDNSku')]"
+            },
+            "resources": [
+                {
+                    "apiVersion": "2016-04-02",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Cdn/profiles', parameters('profileName'))]"
+                    ],
+                    "location": "[parameters('cdnlocation')]",
+                    "name": "[parameters('endpointName')]",
+                    "type": "endpoints",
+                    "properties": {
+                        "originHostHeader": "[parameters('originUrl')]",
+                        "isHttpAllowed": true,
+                        "isHttpsAllowed": true,
+                        "queryStringCachingBehavior": "IgnoreQueryString",
+                        "contentTypesToCompress": [
+                        "text/plain",
+                        "text/html",
+                        "text/css",
+                        "application/x-javascript",
+                        "text/javascript"
+                        ],
+                        "isCompressionEnabled": true,
+                        "origins": [
+                        {
+                            "name": "origin1",
+                            "properties": {
+                            "hostName": "[parameters('originUrl')]"
+                            }
+                        }
+                        ]
+                    }
+                },
+                {
+                    "apiVersion": "2016-04-02",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Cdn/profiles', parameters('profileName'))]"
+                    ],
+                    "location": "[parameters('cdnlocation')]",
+                    "name": "[parameters('endpointName2')]",
+                    "type": "endpoints",
+                    "properties": {
+                        "originHostHeader": "[parameters('originUrl2')]",
+                        "isHttpAllowed": true,
+                        "isHttpsAllowed": true,
+                        "queryStringCachingBehavior": "IgnoreQueryString",
+                        "contentTypesToCompress": [
+                        "text/plain",
+                        "text/html",
+                        "text/css",
+                        "application/x-javascript",
+                        "text/javascript"
+                        ],
+                        "isCompressionEnabled": true,
+                        "origins": [
+                        {
+                            "name": "origin1",
+                            "properties": {
+                            "hostName": "[parameters('originUrl2')]"
+                            }
+                        }
+                        ]
+                    }
+                }
+            ]
+        }
+        
+    ]
+}
