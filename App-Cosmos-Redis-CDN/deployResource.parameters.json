@@ -1,0 +1,73 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        
+        "siteName": {
+            "value": "testwebappa001"
+        },
+        "hostingPlanName": {
+            "value": "testhosting001"
+        },
+        "appInsightsName": {
+            "value": "testwebappai001"
+        },
+        "cacheSKUName": {
+            "value": "Standard"
+        },
+        "cacheSKUFamily": {
+            "value": "C"
+        },
+        "cacheSKUCapacity": {
+            "value": 1
+        },
+        "skuName": {
+            "value": "P1v2"
+        },
+        "skuCapacity": {
+            "value": 1
+        },
+        "cacheName": {
+            "value": "cachetest01"
+        },
+        "environments": {
+            "value": ["slot001","slot002"]
+        },
+        "endpointName": {
+            "value": "eptesttest001"
+        },
+        "originUrl": {
+            "value": "www.testendpointurl00001.com"
+        },
+        "endpointName2": {
+            "value": "eptesttest002"
+        },
+        "originUrl2": {
+            "value": "www.testendpointurl00002.com"
+        },
+        "CDNSku": {
+            "value": "Standard_Akamai"
+        },
+        "profileName": {
+            "value": "testcdnname"
+        },
+        "cdnlocation": {
+            "value": "NorthEurope"
+        },
+        "primaryRegion": {
+            "value": "UKsouth"
+        },
+        "secondaryRegion": {
+            "value": "UKwest"
+        },
+        "databasename": {
+            "value": "mongodbtestappcosmos01"
+        },
+        "collection1Name": {
+            "value": "collection1"
+        },
+        "collection2Name": {
+            "value": "collection2"
+        }
+    }
+}
