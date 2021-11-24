@@ -1,0 +1,98 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "logAnalyticsWorkspaceId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The ID of Log Analytics workspace"
+      }
+    },
+    "logAnalyticsWorkspaceLocation": {
+      "type": "string",
+      "defaultValue": "westeurope",
+      "metadata": {
+        "description": "The location of Log Analytics workspace"
+      }
+    },
+    "actionGroupName": {
+      "type": "string",
+      "defaultValue": "AG00812",
+      "metadata": {
+        "description": "The ID of the action group"
+      }
+    }
+  },
+  "variables": {
+    "apiVersions": {
+      "scheduledQueryRules": "2018-04-16"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Insights/actionGroups",
+      "apiVersion": "2019-06-01",
+      "name": "[parameters('actionGroupName')]",
+      "location": "Global",
+      "properties": {
+        "groupShortName": "[parameters('actionGroupName')]",
+        "enabled": true,
+        "emailReceivers": [
+          {
+            "name": "emailReceiver",
+            "emailAddress": ""
+          }
+        ],
+        "azureFunctionReceivers": [
+          {
+            "functionAppResourceId": "",
+            "functionName": "aaa",
+            "httpTriggerUrl": "",
+            "name": "funcTest01",
+            "useCommonAlertSchema": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "A new Alert Rule",
+      "type": "Microsoft.Insights/scheduledQueryRules",
+      "apiVersion": "[variables( 'apiVersions' ).scheduledQueryRules]",
+      "location": "[toLower( replace( parameters( 'logAnalyticsWorkspaceLocation' ), ' ', '' ) )]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]"
+      ],
+      "properties": {
+        "description": "A new Policy Change, either Delete or Write, has been initiated on a Management Group!",
+        "enabled": "true",
+        "source": {
+          "authorizedResources": [],
+          "query": "AzureActivity",
+          "dataSourceId": "[parameters('logAnalyticsWorkspaceId')]",
+          "queryType": "ResultCount"
+        },
+        "schedule": {
+          "frequencyInMinutes": 5,
+          "timeWindowInMinutes": 360
+        },
+        "action": {
+          "odata.type": "Microsoft.WindowsAzure.Management.Monitoring.Alerts.Models.Microsoft.AppInsights.Nexus.DataContracts.Resources.ScheduledQueryRules.AlertingAction",
+          "severity": "1",
+          "throttlingInMin": 0,
+          "aznsAction": {
+            "actionGroup": [
+              "[resourceId('Microsoft.Insights/actionGroups', parameters('actionGroupName'))]"
+            ],
+            "emailSubject": null,
+            "customWebhookPayload": null
+          },
+          "trigger": {
+            "thresholdOperator": "GreaterThan",
+            "threshold": 0
+          }
+        }
+      }
+    }
+  ]
+}
